@@ -1,0 +1,26 @@
+<h2>List of BookieGames for <%= @bookie %></h2>
+
+<table>
+  <tr>
+    <th>GameID</th>
+    <th>HomeID</th>
+    <th>Starttime</th>
+    <th>Game</th>
+    <th>AwayID</th>
+  </tr>
+
+<% @games.each do |game| %>
+  <tr>
+    <td><%= game.id %></td>
+    <td><%= game.home.id %></td>
+  <% if not game.starttime.nil? %>
+    <td><%= game.starttime.getlocal.strftime("%a, %d.%m. %H:%M") %></td>
+  <% else %>
+    <td></td>
+  <% end %>
+    <td><%= link_to game, admin_bookmaker_bookie_game_path(@bookie, game)  %></td>
+    <td><%= game.away.id %></td>
+  </tr>
+<% end %>
+
+</table>

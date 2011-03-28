@@ -1,0 +1,24 @@
+<%= form_for [:admin, @name] do |f| %>
+  <% if @name.errors.any? %>
+    <div>
+      <h2><%= pluralize(@name.errors.count, "error") %> prohibited this teamname from being saved:</h2>
+      <ul>
+      <% @name.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <%= hidden_field_tag(:bookmaker_id, @bookie.id) %>
+
+  <div>
+    <%= f.submit %>
+  </div>
+
+<% end %>

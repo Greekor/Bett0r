@@ -1,0 +1,26 @@
+<% if flash[:notice] %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+<h1>Admin#Mainpage</h1>
+
+<p>Bookies: <%= @bookies.count %></p>
+
+<%= link_to 'Create Bookmaker', :controller => "admin/bookmakers", :action => "new" %>
+
+<p></p>
+
+<table>
+  <% @bookies.each do |bookie| %>
+    <tr>
+      <td><%= link_to bookie.name, [:admin, bookie] %></td>
+      <td><%= link_to 'Edit', edit_admin_bookmaker_path(bookie) %></td>
+      <td><%= link_to 'Delete', [:admin, bookie], :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p></p>
+
+<p><%= link_to 'List Teamnames', :controller => "admin/teamnames", :action => "index" %></p>
+<p><%= link_to 'List Bettypes', :controller => "admin/bettypes", :action => "index" %></p>

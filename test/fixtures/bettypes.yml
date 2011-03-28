@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  bookmaker: 
+  maintype: 
+
+two:
+  name: MyString
+  bookmaker: 
+  maintype: 

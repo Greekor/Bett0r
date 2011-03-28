@@ -1,0 +1,13 @@
+<%= form_for [:admin, @bookie] do |f| %>
+  <% if @bookie.errors.any? %>
+  <% end %>
+
+  <div>
+    <%= f.label :name %>:
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

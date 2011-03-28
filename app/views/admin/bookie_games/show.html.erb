@@ -1,0 +1,26 @@
+<h2><%= @bookie %></h2>
+<h3><%= @game %></h3>
+
+<table>
+  <tr>
+    <th>Bettype</th>
+    <th></th>
+    <th>1</th>
+    <th></th>
+    <th>X</th>
+    <th></th>
+    <th>2</th>
+  </tr>
+
+  <% @game.odds.each do |odd| %>
+  <tr>
+    <td><%= odd.bettype %></td>
+    <td></td>
+    <td><%= odd.odd1 %></td>
+    <td></td>
+    <td><%= odd.oddX %></td>
+    <td></td>
+    <td><%= odd.odd2 %></td>
+  </tr>
+  <% end %>
+</table>

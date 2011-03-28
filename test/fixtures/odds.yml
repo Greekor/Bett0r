@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  bookie_game: 
+  bettype: 
+  odd1: 9.99
+  oddX: 9.99
+  odd2: 9.99
+
+two:
+  bookie_game: 
+  bettype: 
+  odd1: 9.99
+  oddX: 9.99
+  odd2: 9.99

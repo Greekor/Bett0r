@@ -1,0 +1,33 @@
+<h2>List - Bettypes</h2>
+
+<%= form_tag :action => "update_all", :method => "put" %>
+<table>
+  <tr>
+    <th>Bookmaker</th>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Mapped to</th>
+    <th>Name</th>
+    <th>Bookmaker</th>
+  </tr>
+  <% @bettypes.each do |type| %>
+    <tr>
+      <td><%= type.bookmaker %></td>
+      <td><%= type.id %></td>
+      <td><%= type %></td>
+      <td>=></td>
+      <% if type.is_main? %>
+        <th><%= type %></th>
+        <th></th>
+      <% elsif type.maintype %>
+        <td><%= type.maintype %></td>
+        <td><%= type.maintype.bookmaker %></td>
+      <% else %>
+        <td><%= collection_select("type", type.id, @maintypes, :id, :name, :include_blank => true) %></td>
+        <td><%= check_box_tag("maintype[#{type.id}]") %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
+<p><%= submit_tag 'Update all' %></p>
+

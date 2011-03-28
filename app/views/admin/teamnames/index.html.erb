@@ -1,0 +1,26 @@
+<h2>List - Teamnames</h2>
+
+
+<%= form_tag :action => "update_all", :method => "put" %>
+<table>
+  <% @names.each do |name| %>
+    <tr>
+      <td><%= name.bookmaker %></td>
+      <td><%= name.id %></td>
+      <td><%= name %></td>
+      <td>=></td>
+      <% if name.is_main? %>
+        <th><%= name %></th>
+        <th></th>
+      <% elsif name.mainname %>
+        <td><%= name.mainname %></td>
+        <td><%= name.mainname.bookmaker %></td>
+      <% else %>
+        <td><%= collection_select("name", name.id, @mainnames, :id, :name, :include_blank => true) %></td>
+        <td><%= check_box_tag("mainname[#{name.id}]") %></td>
+      <% end %>
+    </tr>
+  <% end %>
+</table> 
+<p><%= submit_tag 'Update' %></p> 
+<% form_tag %>

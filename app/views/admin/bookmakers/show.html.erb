@@ -1,0 +1,19 @@
+<h1><%= @bookie.name %></h1>
+
+<table>
+  <tr>
+    <td>Teamnames: <%= @bookie.teamnames.count %></td>
+    <td>Unmapped: <%= @bookie.teamnames.unmapped.count %></td>
+    <td><%= link_to 'Show', admin_bookmaker_teamnames_path(@bookie) %></td>
+  </tr>
+  <tr>
+    <td>Bettypes: <%= @bookie.bettypes.count %></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>BookieGames: <%= @bookie.bookie_games.count %></td>
+    <td><%= link_to 'Show', admin_bookmaker_bookie_games_path(@bookie) %></td>
+  </tr>
+</table>
+
+<p><%= link_to 'Back', :controller => '/admin', :action => 'index' %></p>
