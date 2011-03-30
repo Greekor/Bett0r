@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  has_many :bookie_games
+  has_many :bookie_games, :dependent => :destroy
   has_many :odds, :through => :bookie_games do
     def by_bettype
       hash = {}

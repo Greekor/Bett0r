@@ -4,16 +4,19 @@
 
 <table>
   <tr>
+    <th>Date/Time</th>
     <th>Description</th>
     <th>#Odds</th>
   </tr>
 
 <% @games.each do |game| %>
   <tr>
+    <td><%= game.starttime.strftime("%A, %d.%m. %H:%M") %></td>
     <td align="center"><%= game %></td>
     <td><%= game.odds.count %></td>
   </tr>
   <tr>
+    <td></td>
     <td></td>
     <td>
       <table>

@@ -3,7 +3,7 @@ class BookieGame < ActiveRecord::Base
   belongs_to :game
   belongs_to :home, :class_name => "Teamname"
   belongs_to :away, :class_name => "Teamname"
-  has_many :odds do
+  has_many :odds, :dependent => :destroy do
     def find_or_create_by_betname(name)
       find_or_create_by_bettype_id(Bettype.find_or_create_by_bookmaker_id_and_name(proxy_owner.bookmaker_id, name).id)
     end
@@ -60,7 +60,7 @@ class BookieGame < ActiveRecord::Base
 
   def mapable?
     # both teamnames not nil?
-    bool = bool && !self.home_id.nil? && !self.away_id.nil?
+    bool = !self.home_id.nil? && !self.away_id.nil?
     # both teamnames mapped?
     bool = bool && (!Teamname.find(self.home_id).mainname_id.nil? || Teamname.find(self.home_id).main) && (!Teamname.find(self.away_id).mainname_id.nil? || Teamname.find(self.away_id).main)
     puts bool
@@ -71,13 +71,11 @@ class BookieGame < ActiveRecord::Base
     puts "Map BookieGame to Game"
     home = Teamname.find(self.home_id)
     away = Teamname.find(self.away_id)
-    if home.main
-      game = Game.find_or_create_by_home_id_and_away_id(home.id, away.id)
-      self.game_id = game.id
-    else
-      game = Game.find_or_create_by_home_id_and_away_id(home.mainname_id, away.mainname_id)
-      self.game_id = game.id
-    end
+    
+    game = Game.find_or_create_by_home_id_and_away_id(home.main ? home.id : home.mainname_id, away.main ? away.id : away.mainname_id)
+    game.starttime = read_attribute(:starttime) unless self.starttime.nil?
+    game.save
+    self.game_id = game.id
   end
 
   # looks up teamnames in db

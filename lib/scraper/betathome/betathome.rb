@@ -1,18 +1,27 @@
 require 'hpricot'
+require 'open-uri'
 
 class BetAtHomeScraper
   # constructor
   def initialize(sports={"Baseball"=>["MLB Spring Training"], "Soccer"=>["Germany Bundesliga"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("BetAtHome")
+    @dir = File.dirname(__FILE__)
   end
 
-  def load_xml
-    @xml = IO.read("lib/scraper/oddxml.aspx")
+  def load
+    url = "http://www.bet-at-home.com/oddxml.aspx"
+
+    page = open(url)
+    File.open(File.join(@dir, "oddxml.aspx"), "w") do |f|
+      f << page.read
+    end
+    page.close
   end
 
   def parse
-    doc = Hpricot.XML(@xml)
+    f = IO.read(File.join(@dir, "oddxml.aspx"))
+    doc = Hpricot.XML(f)
 
     # each event
     (doc/:Betradar/:OO).each do |event|
@@ -49,8 +58,19 @@ class BetAtHomeScraper
       end
     end
   end
-end
 
-scraper = BetAtHomeScraper.new
-scraper.load_xml
-scraper.parse
+  # loop
+  def run
+    while true do
+      time = File.stat(File.join(@dir, "oddxml.aspx")).mtime
+      # wait at least 5 min
+      while Time.now - 5.minutes < time do
+        puts "sleep..."
+        sleep 60
+      end
+      # load and parse
+      self.load
+      self.parse
+    end
+  end
+end

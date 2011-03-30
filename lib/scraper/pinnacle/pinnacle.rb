@@ -6,22 +6,35 @@ class PinnacleScraper
   def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("PinnacleSports")
+    @dir = File.dirname(__FILE__)
   end
 
-  def load_xml(time=nil)
+  def load(time=nil)
+    # create url with time 
     url = "http://xml.pinnaclesports.com/pinnacleFeed.asp"
     url << "?last=#{time}" unless time.nil?
 
     puts "get: #{url}"
 
-    @xml = IO.read("lib/scraper/pinnacleFeed.asp")
+    page = open(url)
+    File.open(File.join(@dir, "pinnacleFeed.asp"), "w") do |f|
+      f << page.read
+    end
+    page.close
+  end
+
+  def load_next
+    f = IO.read(File.join(@dir, "pinnacleFeed.asp"))
+    doc = Hpricot.XML(f)
+    feedtime = (doc/:pinnacle_line_feed/:PinnacleFeedTime).inner_html
+
+    load(feedtime)
   end
 
   def parse
-    doc = Hpricot.XML(@xml)
-    feedtime = (doc/:pinnacle_line_feed/:PinnacleFeedTime).inner_html
-    puts "Feed Time: #{feedtime}"
-
+    f = IO.read(File.join(@dir, "pinnacleFeed.asp"))
+    doc = Hpricot.XML(f)
+    
     (doc/:pinnacle_line_feed/:events/:event).each do |event|
       # only wanted sports...with valid data
       starttime = (event/:event_datetimeGMT).inner_html
@@ -75,6 +88,26 @@ class PinnacleScraper
     end
   end
 
+  # loop
+  def run
+    # first: load entire feed
+    begin
+      self.load
+      self.parse
+    end unless File.exists(File.join(@dir, "pinnacleFeed.asp"))
+
+    while true do
+      time = File.stat(File.join(@dir, "pinnacleFeed.asp")).mtime
+      # wait at least 5 min
+      while Time.now - 5.minutes < time do
+        puts "sleep..."
+        sleep 30
+      end
+      # only load new odds
+      self.load_next
+      self.parse
+    end
+  end
 
   # converts from american style odds into decimal
   def to_dec(am)
@@ -84,7 +117,3 @@ class PinnacleScraper
     dec.round(3)
   end
 end
-
-scraper = PinnacleScraper.new
-scraper.load_xml
-scraper.parse
