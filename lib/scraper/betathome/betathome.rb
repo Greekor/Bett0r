@@ -3,7 +3,7 @@ require 'open-uri'
 
 class BetAtHomeScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB Spring Training"], "Soccer"=>["Germany Bundesliga"]})
+  def initialize(sports={"Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("BetAtHome")
     @dir = File.dirname(__FILE__)

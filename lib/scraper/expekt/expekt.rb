@@ -3,7 +3,7 @@ require 'open-uri'
 
 class ExpektScraper
   # constructor
-  def initialize(sports=["Ger. 1. Bundesliga", "MLB Preseason"])
+  def initialize(sports=["Ger. 1. Bundesliga", "MLB Preseason", "MLB"])
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("Expekt")
     @dir = File.dirname(__FILE__)
@@ -33,7 +33,7 @@ class ExpektScraper
         # regexp
         description = (event/:description).text.sub(league, "").strip
         puts "-- #{description} --"
-        if /(?<home>.+) - (?<away>[^:]+)(: )?(?<bettype>.*)/ =~ description then
+        if /(?<home>.+?) - (?<away>[^<:]+)[^:]+(: )?(?<bettype>.*)/ =~ description then
           infos[:home_name] = home.strip
           infos[:away_name] = away.strip
           infos[:bettype] = bettype.strip
@@ -56,7 +56,7 @@ class ExpektScraper
           game.starttime = Time.zone.parse starttime
           game.save
 
-          puts infos[:bettype]
+          puts "Bettype: #{infos[:bettype]}"
           odd = game.odds.find_or_create_by_betname(infos[:bettype])
           odd.odd1 = odd1
           odd.oddX = oddX unless oddX == "0.00"

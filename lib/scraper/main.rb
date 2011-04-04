@@ -7,6 +7,7 @@ require File.expand_path File.join(File.dirname(__FILE__), 'betathome/betathome.
 pinn = PinnacleScraper.new
 bah = BetAtHomeScraper.new
 exp = ExpektScraper.new
+
 # loop
 while true do
   puts "PinnacleScraper"
