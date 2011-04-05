@@ -8,7 +8,8 @@
   </tr>
   <tr>
     <td>Bettypes: <%= @bookie.bettypes.count %></td>
-    <td></td>
+    <td>Unmapped: <%= @bookie.bettypes.unmapped.count %></td>
+    <td><%= link_to 'Show', admin_bookmaker_bettypes_path(@bookie) %></td>
   </tr>
   <tr>
     <td>BookieGames: <%= @bookie.bookie_games.count %></td>

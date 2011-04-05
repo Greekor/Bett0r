@@ -1,9 +1,26 @@
 require 'hpricot'
 require 'open-uri'
 
+=begin
+
+implemented bettypes:
+  2Way / 3Way
+  Over/Under (Total)
+  
+implemented sports:
+  Baseball: MLB Spring Training
+            MLB
+  Soccer:   Germany Bundesliga
+            England Premier League
+            Spain Primera Division
+
+
+=end
+
+
 class BetAtHomeScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB Spring Training"], "Soccer"=>["Germany Bundesliga"]})
+  def initialize(sports={"Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga", "England Premier League", "Spain Primera Division"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("BetAtHome")
     @dir = File.dirname(__FILE__)
@@ -32,29 +49,25 @@ class BetAtHomeScraper
 
         betname = (event/:OddsType).inner_html
         oddsData = (event/:OddsData)
-        home_name = (oddsData/:HomeTeam).inner_html
-        away_name = (oddsData/:AwayTeam).inner_html
-        odd1 = (oddsData/:HomeOdds).inner_html
-        oddX = (oddsData/:DrawOdds).inner_html if (oddsData/:DrawOdds).size>0
-        odd2 = (oddsData/:AwayOdds).inner_html
 
-        game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
 
-        Time.zone = "CET"
-        game.starttime = Time.zone.parse starttime
-        game.save
+        if self.class.private_method_defined? "parse_#{betname}" then
+          home_name = (oddsData/:HomeTeam).inner_html
+          away_name = (oddsData/:AwayTeam).inner_html
+          game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
+        
+          # starttime
+          Time.zone = "CET"
+          game.starttime = Time.zone.parse starttime
+          game.save
 
-        odd = game.odds.find_or_create_by_betname(betname)
-        odd.odd1 = odd1
-        odd.oddX = oddX
-        odd.odd2 = odd2
-        odd.save
-        # set updated_at
-        odd.touch
+          # odds
+          send "parse_#{betname}", game, oddsData
 
-        puts "+++"
-        puts game.inspect
-        puts "---"
+          puts "+++"
+          puts game.inspect
+          puts "---"
+        end
       end
     end
   end
@@ -73,4 +86,57 @@ class BetAtHomeScraper
       self.parse
     end
   end
+
+  private
+
+  # methods for parsing different bettypes
+
+  # 2way odds
+  def parse_2W(game, oddsData)
+    betname = "2W"
+    odd = game.odds.find_or_create_by_betname(betname)
+
+    odd1 = (oddsData/:HomeOdds).inner_html
+    odd2 = (oddsData/:AwayOdds).inner_html
+        
+    odd.odd1 = odd1
+    odd.odd2 = odd2
+    odd.save
+    # set updated_at
+    odd.touch
+  end
+
+  # 3way odds
+  def parse_3W(game, oddsData)
+    betname = "3W"
+    odd = game.odds.find_or_create_by_betname(betname)
+
+    odd1 = (oddsData/:HomeOdds).inner_html
+    oddX = (oddsData/:DrawOdds).inner_html
+    odd2 = (oddsData/:AwayOdds).inner_html
+        
+    odd.odd1 = odd1
+    odd.oddX = oddX
+    odd.odd2 = odd2
+    odd.save
+    # set updated_at
+    odd.touch
+  end
+
+  # total odds
+  def parse_Total(game, oddsData)
+    betname = "Over/Under #{(oddsData/:Totalscore).inner_html}"
+    odd = game.odds.find_or_create_by_betname(betname)
+
+    over = (oddsData/:OverOdds).inner_html
+    under = (oddsData/:UnderOdds).inner_html
+
+    odd.over = over
+    odd.under = under
+    odd.save
+    #set updated_at
+    odd.touch
+  end
+
 end
+

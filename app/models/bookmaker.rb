@@ -11,7 +11,7 @@ class Bookmaker < ActiveRecord::Base
   end
   has_many :bettypes do
     def unmapped
-      find(:all, :conditions => { :mainname_id => nil, :main => false})
+      find(:all, :conditions => { :maintype_id => nil, :main => false})
     end
   end
 

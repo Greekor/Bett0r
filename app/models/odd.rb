@@ -5,6 +5,9 @@ class Odd < ActiveRecord::Base
   belongs_to :bookie_game
   belongs_to :bettype
 
+  alias_attribute :over, :odd1
+  alias_attribute :under, :odd2
+
   def betname=(n)
     @betname = n
   end

@@ -5,7 +5,7 @@ class Admin::TeamnamesController < ApplicationController
     else
       @names = Teamname.where("bookmaker_id = ?", params[:bookmaker_id]).order("name").all
     end
-    @mainnames = Teamname.where(:main => true).all
+    @mainnames = Teamname.order(:name).where(:main => true).all
   end
 
   def update_all

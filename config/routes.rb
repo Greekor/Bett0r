@@ -5,6 +5,7 @@ Bett0r::Application.routes.draw do
     resources :bookmakers do
       resources :bookie_games
       resources :teamnames
+      resources :bettypes
     end
     match "teamnames/update_all" => "teamnames#update_all"
     match "bettypes/update_all" => "bettypes#update_all"

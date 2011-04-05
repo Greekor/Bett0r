@@ -1,8 +1,12 @@
 class Admin::BettypesController < ApplicationController
   def index
-    @bettypes = Bettype.order("bookmaker_id").all
+    if params[:bookmaker_id].nil?
+      @bettypes = Bettype.order("bookmaker_id").all
+    else
+      @bettypes = Bettype.where("bookmaker_id = ?", params[:bookmaker_id]).order("name").all
+    end
 
-    @maintypes = Bettype.where(:main => true).all
+    @maintypes = Bettype.order(:name).where(:main => true).all
   end
 
   def update_all

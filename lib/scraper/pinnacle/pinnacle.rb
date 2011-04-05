@@ -1,9 +1,25 @@
 require 'hpricot'
 require 'open-uri'
 
+=begin
+
+implemented bettypes:
+  Moneyline
+  Over/Under (Total)
+  Spread (Handicap)
+
+implemented sports:
+Baseball: MLB
+Soccer:   Bundesliga
+          Eng. Premier
+          La Liga (Spain)
+
+
+=end
+
 class PinnacleScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga"]})
+  def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga", "Eng. Premier", "La Liga"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("PinnacleSports")
     @dir = File.dirname(__FILE__)
@@ -64,7 +80,7 @@ class PinnacleScraper
         (event/:periods/:period).each do |period|
           # only whole game
           if (period/:period_number).inner_html == "0" then
-            # only moneyline
+            # moneyline
             moneyline = (period/:moneyline)
             if moneyline.size > 0 then
               if (moneyline/:moneyline_draw).size > 0 then
@@ -76,6 +92,30 @@ class PinnacleScraper
               odd.odd1 = to_dec (moneyline/:moneyline_home).inner_html
               odd.oddX = to_dec (moneyline/:moneyline_draw).inner_html if (moneyline/:moneyline_draw).size > 0
               odd.odd2 = to_dec (moneyline/:moneyline_visiting).inner_html
+              odd.save
+              # set updated_at even if nothing has changed
+              odd.touch
+            end
+            
+            # Over/Under
+            total = (period/:total)
+            if total.size > 0 then
+              betname = "Over/Under #{(total/:total_points).inner_html}"
+              odd = game.odds.find_or_create_by_betname(betname)
+              odd.odd1 = to_dec (total/:over_adjust).inner_html if (total/:over_adjust).size > 0
+              odd.odd2 = to_dec (total/:under_adjust).inner_html if (total/:under_adjust).size > 0
+              odd.save
+              # set updated_at even if nothing has changed
+              odd.touch
+            end
+
+            # spread/handicap
+            spread = (period/:spread)
+            if spread.size > 0 then
+              betname = "Spread #{(spread/:spread_home).inner_html}"
+              odd = game.odds.find_or_create_by_betname(betname)
+              odd.odd1 = to_dec (spread/:spread_adjust_home).inner_html
+              odd.odd2 = to_dec (spread/:spread_adjust_visiting).inner_html
               odd.save
               # set updated_at even if nothing has changed
               odd.touch
@@ -117,3 +157,4 @@ class PinnacleScraper
     dec.round(3)
   end
 end
+
