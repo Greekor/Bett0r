@@ -14,6 +14,8 @@ Bett0r::Application.routes.draw do
   get "admin/index"
   get "admin/teamnames/index"
 
+  get "analyzer/index"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

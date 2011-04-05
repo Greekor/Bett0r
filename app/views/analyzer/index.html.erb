@@ -1,0 +1,27 @@
+<h2><%= @bets.count %> Bets over 98.5%</h2>
+
+<table border="1">
+<% @bets.each do |bet| %>
+  <tr>
+    <td><%= bet[:game].starttime.strftime("%A, %d.%m. %H:%M") %></td>
+    <td><%= bet[:game] %></td>
+    <td colspan="4"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><%= bet[:bettype] %></td>
+    <td><%= bet[:odd1].bookie_game.bookmaker %></td>
+    <td><%= bet[:oddX].bookie_game.bookmaker unless bet[:oddX].oddX.nil? %></td>
+    <td><%= bet[:odd2].bookie_game.bookmaker %></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td colspan="2"></td>
+    <td><%= bet[:odd1].odd1 %></td>
+    <td><%= bet[:oddX].oddX %></td>
+    <td><%= bet[:odd2].odd2 %></td>
+    <td><%= bet[:per].round(2) %></td>
+  </tr
+</tr>
+<% end %>
+</table>
