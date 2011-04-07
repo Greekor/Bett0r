@@ -11,15 +11,17 @@ implemented bettypes:
 implemented sports:
 Baseball: MLB
 Soccer:   Bundesliga
+          Bundesliga 2
           Eng. Premier
           La Liga (Spain)
+          Serie A
 
 
 =end
 
 class PinnacleScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga", "Eng. Premier", "La Liga"]})
+  def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga", "Bundesliga 2", "Eng. Premier", "La Liga", "Serie A"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("PinnacleSports")
     @dir = File.dirname(__FILE__)
@@ -158,3 +160,6 @@ class PinnacleScraper
   end
 end
 
+#p = PinnacleScraper.new
+#p.load
+#p.parse

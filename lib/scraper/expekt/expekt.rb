@@ -10,14 +10,16 @@ implemented sports:
   Baseball: MLB Preseason
             MLB
   Soccer: Ger. 1. Bundesliga
+          Ger. 2. Bundesliga
           Eng. Premier League
           Spa. Primera Division
+          Ita. Serie A
 
 =end
 
 class ExpektScraper
   # constructor
-  def initialize(sports=["Ger. 1. Bundesliga", "Eng. Premier League", "MLB Preseason", "MLB", "Spa. Primera Division"])
+  def initialize(sports=["Ger. 1. Bundesliga", "Ger. 2. Bundesliga", "Eng. Premier League", "MLB Preseason", "MLB", "Spa. Primera Division", "Ita. Serie A"])
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("Expekt")
     @dir = File.dirname(__FILE__)
@@ -132,3 +134,6 @@ class ExpektScraper
 
 end
 
+#e = ExpektScraper.new
+#e.load
+#e.parse

@@ -8,9 +8,10 @@ implemented bettypes:
 
 implemented sports:
 	Fußball =>
-		Deutschland => Bundesliga
+		Deutschland => Bundesliga, 2. Bundesliga
 		England => Premier League
 		Spanien => Primera Division
+    Italien => Serie A
 
 =end
 
@@ -18,9 +19,10 @@ class BWinScraper
   # constructor
   def initialize(sports={
   			"fu%C3%9Fball" => {
-  				"Deutschland" => [ "Bundesliga" ],
+  				"Deutschland" => [ "Bundesliga", "2. Bundesliga" ],
   				"England" => [ "Premier League" ],
-  				"Spanien" => [ "Primera Division (Liga BBVA)" ]
+  				"Spanien" => [ "Primera Division (Liga BBVA)" ],
+          "Italien" => [ "Serie A" ],
   			}  			
   			})
     @sports = sports
@@ -124,3 +126,7 @@ class BWinScraper
   end
 
 end
+
+#b = BWinScraper.new
+#b.get_league_ids
+#b.load_and_parse

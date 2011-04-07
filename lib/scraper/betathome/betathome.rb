@@ -11,8 +11,10 @@ implemented sports:
   Baseball: MLB Spring Training
             MLB
   Soccer:   Germany Bundesliga
+            Germany 2. Liga
             England Premier League
             Spain Primera Division
+            Italy Serie A
 
 
 =end
@@ -20,7 +22,7 @@ implemented sports:
 
 class BetAtHomeScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga", "England Premier League", "Spain Primera Division"]})
+  def initialize(sports={"Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga", "Germany 2. Liga", "England Premier League", "Spain Primera Division", "Italy Serie A" ]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("BetAtHome")
     @dir = File.dirname(__FILE__)
@@ -140,3 +142,6 @@ class BetAtHomeScraper
 
 end
 
+#b = BetAtHomeScraper.new
+#b.load
+#b.parse
