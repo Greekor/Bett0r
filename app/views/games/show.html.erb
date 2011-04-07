@@ -1,0 +1,41 @@
+<h1>Hello :-)</h1>
+
+<table>
+  <tr>
+    <th>Date/Time</th>
+    <th>Description</th>
+    <th>#Odds</th>
+  </tr>
+
+  <tr>
+    <td><%= @game.starttime.strftime("%A, %d.%m. %H:%M") %></td>
+    <td align="center"><%= @game %></td>
+    <td><%= @game.odds.count %></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td>
+      <table>
+  <% @game.odds.by_bettype.each do |bettype, odds| %>
+        <tr>
+          <th colspan="5"><%= bettype %></th>
+        </tr>
+    <% odds.each do |odd| %>
+        <tr>
+          <td><%= odd.bookie_game.bookmaker %></td>
+          <td><%= odd.odd1 %></td>
+          <td><%= odd.oddX %></td>
+          <td><%= odd.odd2 %></td>
+        <% if odd.updated_at.today? %>
+          <td><%= odd.updated_at.getlocal.strftime("%H:%M") %></td>
+        <% else %>
+          <td><%= odd.updated_at.getlocal.strftime("%d.%m %H:%M") %></td>
+        <% end %>
+        </tr>
+    <% end %>
+  <% end %>
+      </table>
+    </td>
+  </tr>
+</table>

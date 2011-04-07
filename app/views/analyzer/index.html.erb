@@ -1,10 +1,10 @@
 <h2><%= @bets.count %> Bets over 98.5%</h2>
 
-<table border="1">
+<table>
 <% @bets.each do |bet| %>
   <tr>
     <td><%= bet[:game].starttime.strftime("%A, %d.%m. %H:%M") %></td>
-    <td><%= bet[:game] %></td>
+    <td><%= link_to bet[:game], game_path(bet[:game].id) %></td>
     <td colspan="4"></td>
   </tr>
   <tr>

@@ -16,6 +16,8 @@ Bett0r::Application.routes.draw do
 
   get "analyzer/index"
 
+  resources :games
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
