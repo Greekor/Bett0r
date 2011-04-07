@@ -9,9 +9,10 @@ implemented bettypes:
 
 implemented sports:
   Fußball =>
-     Deutschland => 1. Bundesliga
+     Deutschland => 1. Bundesliga, 2. Bundesliga
      England => Premier League
      Spanien => Primera Division
+     Italien => Serie A
 
 =end
 
@@ -19,9 +20,10 @@ class Bet3000Scraper
   # constructor
   def initialize(sports=
         {"Fußball" => 
-          { "Deutschland" => [ "1. Bundesliga" ],
+          { "Deutschland" => [ "1. Bundesliga", "2. Bundesliga" ],
             "England" => [ "Premier League" ],
             "Spanien" => [ "Primera Division" ],
+            "Italien" => [ "Serie A" ],
           }
         } )
 		@sports = sports
@@ -161,3 +163,6 @@ class Bet3000Scraper
 
 end
 
+#b = Bet3000Scraper.new
+#b.load_and_parse_navigation
+#b.load_and_parse
