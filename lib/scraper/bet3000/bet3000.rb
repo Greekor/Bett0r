@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'hpricot'
 require 'open-uri'
 
@@ -159,8 +160,4 @@ class Bet3000Scraper
   end
 
 end
-
-bet = Bet3000Scraper.new
-bet.load_and_parse_navigation
-bet.load_and_parse
 

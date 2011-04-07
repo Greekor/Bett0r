@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   def index
-    @games = Game.includes(:odds => [{:bookie_game => :bookmaker}, :bettype]).all
+    @games = Game.order(:starttime).includes(:odds => [{:bookie_game => :bookmaker}, :bettype]).all
     Time.zone = "CET"
   end
 end
