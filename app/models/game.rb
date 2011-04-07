@@ -46,7 +46,7 @@ class Game < ActiveRecord::Base
         infos[:oddX] = odds.last
         odds.sort_by! { |o| o.odd2 }
         infos[:odd2] = odds.last
-        if not (infos[:odd1].odd1.nil? || infos[:odd2].odd2.nil?) then
+        unless (infos[:odd1].odd1.nil? || infos[:odd2].odd2.nil?) then
           infos[:per] = 1 / (1/infos[:odd1].odd1 + (infos[:oddX].oddX.nil? ? 0.0 : 1/infos[:oddX].oddX) + 1/infos[:odd2].odd2) * 100
           array << infos
         end

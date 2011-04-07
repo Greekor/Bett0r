@@ -6,3 +6,7 @@ tmp/
 lib/scraper/pinnacle/pinnacleFeed.asp
 lib/scraper/betathome/oddxml.aspx
 lib/scraper/expekt/exportServlet
+lib/scraper/bet3000/*.html*
+lib/scraper/bwin/*.html*
+lib/scraper/bwin/*.aspx*
+lib/scraper/bwin/fu%C3%9Fball
