@@ -15,13 +15,14 @@ Soccer:   Bundesliga
           Eng. Premier
           La Liga (Spain)
           Serie A
+Basketball: NBA
 
 
 =end
 
 class PinnacleScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB"], "Soccer"=>["Bundesliga", "Bundesliga 2", "Eng. Premier", "La Liga", "Serie A"]})
+  def initialize(sports={"Basketball"=>["NBA"],"Baseball"=>["MLB"], "Soccer"=>["Bundesliga", "Bundesliga 2", "Eng. Premier", "La Liga", "Serie A"]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("PinnacleSports")
     @dir = File.dirname(__FILE__)

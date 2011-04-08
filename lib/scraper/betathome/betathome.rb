@@ -8,6 +8,7 @@ implemented bettypes:
   Over/Under (Total)
   
 implemented sports:
+  Basketball: NBA
   Baseball: MLB Spring Training
             MLB
   Soccer:   Germany Bundesliga
@@ -22,7 +23,7 @@ implemented sports:
 
 class BetAtHomeScraper
   # constructor
-  def initialize(sports={"Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga", "Germany 2. Liga", "England Premier League", "Spain Primera Division", "Italy Serie A" ]})
+  def initialize(sports={"Basketball"=>["NBA"], "Baseball"=>["MLB Spring Training", "MLB"], "Soccer"=>["Germany Bundesliga", "Germany 2. Liga", "England Premier League", "Spain Primera Division", "Italy Serie A" ]})
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("BetAtHome")
     @dir = File.dirname(__FILE__)

@@ -5,8 +5,11 @@ require 'open-uri'
 
 implemented bettypes:
 	3Way
+  2Way (Siegwette)
 
 implemented sports:
+  Basketball =>
+    Nordamerika => NBA
 	Fußball =>
 		Deutschland => Bundesliga, 2. Bundesliga
 		England => Premier League
@@ -18,6 +21,9 @@ implemented sports:
 class BWinScraper
   # constructor
   def initialize(sports={
+        "basketball" => {
+          "Nordamerika" => [ "NBA" ],
+        },
   			"fu%C3%9Fball" => {
   				"Deutschland" => [ "Bundesliga", "2. Bundesliga" ],
   				"England" => [ "Premier League" ],
@@ -29,6 +35,7 @@ class BWinScraper
     @bookie = Bookmaker.find_or_create_by_name("BWin")
     @dir = File.dirname(__FILE__)
     @leagueids = {}
+    Time.zone = "CET"
   end
   
   def load(url)
@@ -65,37 +72,20 @@ class BWinScraper
   				url = main_url+@leagueids[sport][region][league] 
   				load(url)
   				doc = Hpricot(open(File.join(@dir, url.split("/").last)))
-  				
-  				(doc/"div.dsBodyLeft").each do |day|
-						date = (day/"span.spanInnerLeft").inner_text.strip
-						(day/"tr.normal").each do |game|
-							cols = (game/"/td")
-							time = cols[0].inner_text.strip
-							home_name = (cols[1]/"td.label").inner_text.strip
-							odd1 = (cols[1]/"td.odd").inner_text.strip
-							oddX = (cols[2]/"td.odd").inner_text.strip
-							odd2 = (cols[3]/"td.odd").inner_text.strip
-							away_name = (cols[3]/"td.label").inner_text.strip
 
-							game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
+          betname = (doc/"div.bet-list/h1").inner_text.strip.gsub("-","")
+
+          if self.class.private_method_defined? "parse_#{betname}" then
+    				(doc/"div.dsBodyLeft").each do |day|
+	  					date = (day/"span.spanInnerLeft").inner_text.strip
+		  				(day/"tr.normal").each do |game|
+                cols = (game/"/td")
+				  			time = cols[0].inner_text.strip
 							
-							#starttime
-		          Time.zone = "CET"
-		          game.starttime = Time.parse("#{date}T#{time}")
-		          game.save
+                #odds
+                send "parse_#{betname}", cols, date
 		          
-		          betname = "3Way"
-					    odd = game.odds.find_or_create_by_betname(betname)
-
-					    odd.odd1 = odd1
-					    odd.oddX = oddX
-					    odd.odd2 = odd2
-					    odd.save
-					    #
-					    odd.touch
-		          
-							puts "#{date}T#{time}: #{home_name} vs. #{away_name} #{odd1} - #{oddX} - #{odd2}"
-							puts
+              end
 						end	
 					end
   				
@@ -125,6 +115,59 @@ class BWinScraper
     end
   end
 
+  private
+
+  def parse_3Weg(cols, date)
+  	time = cols[0].inner_text.strip
+		home_name = (cols[1]/"td.label").inner_text.strip
+	 	away_name = (cols[3]/"td.label").inner_text.strip
+
+  	game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
+							
+		#starttime
+    game.starttime = Time.parse("#{date}T#{time}")
+    game.save
+
+    betname = "3Way"
+		odd = game.odds.find_or_create_by_betname(betname)
+
+  	odd1 = (cols[1]/"td.odd").inner_text.strip
+	  oddX = (cols[2]/"td.odd").inner_text.strip
+		odd2 = (cols[3]/"td.odd").inner_text.strip
+		odd.odd1 = odd1
+		odd.oddX = oddX
+		odd.odd2 = odd2
+		odd.save
+  	#
+    odd.touch
+
+    puts "#{home_name} vs. #{away_name}"
+  end
+
+  def parse_Siegwette(cols, date)
+  	time = cols[0].inner_text.strip
+		home_name = (cols[1]/"td.label").inner_text.strip
+	 	away_name = (cols[2]/"td.label").inner_text.strip
+
+  	game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
+							
+		#starttime
+    game.starttime = Time.parse("#{date}T#{time}")
+    game.save
+
+    betname = "2Way"
+		odd = game.odds.find_or_create_by_betname(betname)
+
+  	odd1 = (cols[1]/"td.odd").inner_text.strip
+		odd2 = (cols[2]/"td.odd").inner_text.strip
+		odd.odd1 = odd1
+		odd.odd2 = odd2
+		odd.save
+  	#
+    odd.touch
+
+    puts "#{home_name} vs. #{away_name}"
+  end
 end
 
 #b = BWinScraper.new

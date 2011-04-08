@@ -6,6 +6,7 @@ require 'open-uri'
 
 implemented bettypes:
   3WAY
+  2WAY
 
 implemented sports:
   Fußball =>
@@ -14,12 +15,18 @@ implemented sports:
      Spanien => Primera Division
      Italien => Serie A
 
+  Basketball =>
+    USA => NBA
+
 =end
 
 class Bet3000Scraper
   # constructor
   def initialize(sports=
-        {"Fußball" => 
+        { "Basketball inkl. Verlängerung" =>
+          { "USA" => [ "NBA" ]
+          },
+          "Fußball" => 
           { "Deutschland" => [ "1. Bundesliga", "2. Bundesliga" ],
             "England" => [ "Premier League" ],
             "Spanien" => [ "Primera Division" ],
@@ -161,8 +168,20 @@ class Bet3000Scraper
     odd.touch
   end
 
+  def parse_2WAY(game, infos)
+    betname = "2Way"
+    odd = game.odds.find_or_create_by_betname(betname)
+
+    odd.odd1 = infos["home"]
+    odd.odd2 = infos["visitor"]
+    odd.save
+    #
+    odd.touch
+  end
+
 end
 
 #b = Bet3000Scraper.new
 #b.load_and_parse_navigation
 #b.load_and_parse
+
