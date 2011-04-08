@@ -12,7 +12,7 @@ class BookieGame < ActiveRecord::Base
 
   # callbacks
   before_save :map_teamnames, :if => :names_mapable?
-  before_save :map_to_game, :if => :mapable?
+  before_save :map_to_game, :if => :game_mapable?
 
   # attributes not stores in db
   def home_name=(n)
@@ -58,12 +58,12 @@ class BookieGame < ActiveRecord::Base
     !(home_name.nil? || away_name.nil?)
   end
 
-  def mapable?
+  def game_mapable?
+    bool = !self.starttime.nil?
     # both teamnames not nil?
-    bool = !self.home_id.nil? && !self.away_id.nil?
+    bool = bool && !self.home_id.nil? && !self.away_id.nil?
     # both teamnames mapped?
     bool = bool && (!Teamname.find(self.home_id).mainname_id.nil? || Teamname.find(self.home_id).main) && (!Teamname.find(self.away_id).mainname_id.nil? || Teamname.find(self.away_id).main)
-    puts bool
     bool
   end
 
@@ -71,10 +71,33 @@ class BookieGame < ActiveRecord::Base
     puts "Map BookieGame to Game"
     home = Teamname.find(self.home_id)
     away = Teamname.find(self.away_id)
-    
-    game = Game.find_or_create_by_home_id_and_away_id(home.main ? home.id : home.mainname_id, away.main ? away.id : away.mainname_id)
-    game.starttime = read_attribute(:starttime) unless self.starttime.nil?
-    game.save
+   
+    # find game 
+    game = Game.where(:starttime => (read_attribute(:starttime)-2.hours)..(read_attribute(:starttime)+2.hours)).find_by_home_id_and_away_id(home.main ? home.id : home.mainname_id, away.main ? away.id : away.mainname_id)
+
+    game.odds.alias_attribute :home, :odd1 unless game.nil?
+    game.odds.alias_attribute :draw, :oddX unless game.nil?
+    game.odds.alias_attribute :away, :odd2 unless game.nil?
+
+    # if not found, change home<=>away
+    if game.nil? then
+      game = Game.where(:starttime => (read_attribute(:starttime)-2.hours)..(read_attribute(:starttime)+2.hours)).find_by_away_id_and_home_id(home.main ? home.id : home.mainname_id, away.main ? away.id : away.mainname_id)
+
+      # inverse!!
+      game.odds.alias_attribute :home, :odd2 unless game.nil?
+      game.odds.alias_attribute :draw, :oddX unless game.nil?
+      game.odds.alias_attribute :away, :odd1 unless game.nil?
+    end
+    # if still not found, create new game
+    if game.nil? then
+      game = Game.new(:home_id => (home.main ? home.id : home.mainname_id) ,:away_id => (away.main ? away.id : away.mainname_id))
+      game.starttime = read_attribute(:starttime)
+      game.save
+
+      game.odds.alias_attribute :home, :odd1 unless game.nil?
+      game.odds.alias_attribute :draw, :oddX unless game.nil?
+      game.odds.alias_attribute :away, :odd2 unless game.nil?
+    end
     self.game_id = game.id
   end
 

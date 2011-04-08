@@ -139,9 +139,9 @@ class BWinScraper
   	odd1 = (cols[1]/"td.odd").inner_text.strip
 	  oddX = (cols[2]/"td.odd").inner_text.strip
 		odd2 = (cols[3]/"td.odd").inner_text.strip
-		odd.odd1 = odd1
-		odd.oddX = oddX
-		odd.odd2 = odd2
+		odd.home = odd1
+		odd.draw = oddX
+		odd.away = odd2
 		odd.save
   	#
     odd.touch
@@ -165,8 +165,8 @@ class BWinScraper
 
   	odd1 = (cols[1]/"td.odd").inner_text.strip
 		odd2 = (cols[2]/"td.odd").inner_text.strip
-		odd.odd1 = odd1
-		odd.odd2 = odd2
+		odd.home = odd1
+		odd.away = odd2
 		odd.save
   	#
     odd.touch

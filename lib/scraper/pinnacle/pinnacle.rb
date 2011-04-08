@@ -92,9 +92,9 @@ class PinnacleScraper
                 betname = "Game - Moneyline - 2Way" 
               end
               odd = game.odds.find_or_create_by_betname(betname)
-              odd.odd1 = to_dec (moneyline/:moneyline_home).inner_html
-              odd.oddX = to_dec (moneyline/:moneyline_draw).inner_html if (moneyline/:moneyline_draw).size > 0
-              odd.odd2 = to_dec (moneyline/:moneyline_visiting).inner_html
+              odd.home = to_dec (moneyline/:moneyline_home).inner_html
+              odd.draw = to_dec (moneyline/:moneyline_draw).inner_html if (moneyline/:moneyline_draw).size > 0
+              odd.away = to_dec (moneyline/:moneyline_visiting).inner_html
               odd.save
               # set updated_at even if nothing has changed
               odd.touch
@@ -105,8 +105,8 @@ class PinnacleScraper
             if total.size > 0 then
               betname = "Over/Under #{(total/:total_points).inner_html}"
               odd = game.odds.find_or_create_by_betname(betname)
-              odd.odd1 = to_dec (total/:over_adjust).inner_html if (total/:over_adjust).size > 0
-              odd.odd2 = to_dec (total/:under_adjust).inner_html if (total/:under_adjust).size > 0
+              odd.over = to_dec (total/:over_adjust).inner_html if (total/:over_adjust).size > 0
+              odd.under = to_dec (total/:under_adjust).inner_html if (total/:under_adjust).size > 0
               odd.save
               # set updated_at even if nothing has changed
               odd.touch
@@ -117,8 +117,8 @@ class PinnacleScraper
             if spread.size > 0 then
               betname = "Spread #{(spread/:spread_home).inner_html}"
               odd = game.odds.find_or_create_by_betname(betname)
-              odd.odd1 = to_dec (spread/:spread_adjust_home).inner_html
-              odd.odd2 = to_dec (spread/:spread_adjust_visiting).inner_html
+              odd.home = to_dec (spread/:spread_adjust_home).inner_html
+              odd.away = to_dec (spread/:spread_adjust_visiting).inner_html
               odd.save
               # set updated_at even if nothing has changed
               odd.touch

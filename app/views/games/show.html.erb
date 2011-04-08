@@ -24,9 +24,9 @@
     <% odds.each do |odd| %>
         <tr>
           <td><%= odd.bookie_game.bookmaker %></td>
-          <td><%= odd.odd1 %></td>
-          <td><%= odd.oddX %></td>
-          <td><%= odd.odd2 %></td>
+          <td><%= odd.home %></td>
+          <td><%= odd.draw %></td>
+          <td><%= odd.away %></td>
         <% if odd.updated_at.today? %>
           <td><%= odd.updated_at.getlocal.strftime("%H:%M") %></td>
         <% else %>

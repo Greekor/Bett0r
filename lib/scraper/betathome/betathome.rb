@@ -102,8 +102,8 @@ class BetAtHomeScraper
     odd1 = (oddsData/:HomeOdds).inner_html
     odd2 = (oddsData/:AwayOdds).inner_html
         
-    odd.odd1 = odd1
-    odd.odd2 = odd2
+    odd.home = odd1
+    odd.away = odd2
     odd.save
     # set updated_at
     odd.touch
@@ -118,9 +118,9 @@ class BetAtHomeScraper
     oddX = (oddsData/:DrawOdds).inner_html
     odd2 = (oddsData/:AwayOdds).inner_html
         
-    odd.odd1 = odd1
-    odd.oddX = oddX
-    odd.odd2 = odd2
+    odd.home = odd1
+    odd.draw = oddX
+    odd.away = odd2
     odd.save
     # set updated_at
     odd.touch

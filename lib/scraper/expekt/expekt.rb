@@ -108,9 +108,9 @@ class ExpektScraper
     betname = (oddX == "0.00") ? "Game - 2W" : "Game - 3W"
           
     odd = game.odds.find_or_create_by_betname(betname)
-    odd.odd1 = odd1
-    odd.oddX = oddX unless oddX == "0.00"
-    odd.odd2 = odd2
+    odd.home = odd1
+    odd.draw = oddX unless oddX == "0.00"
+    odd.away = odd2
     odd.save
     # set updated_at
     odd.touch

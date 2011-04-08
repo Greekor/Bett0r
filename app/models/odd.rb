@@ -8,6 +8,10 @@ class Odd < ActiveRecord::Base
   alias_attribute :over, :odd1
   alias_attribute :under, :odd2
 
+  alias_attribute :home, :odd1
+  alias_attribute :draw, :oddX
+  alias_attribute :away, :odd2
+
   def betname=(n)
     @betname = n
   end

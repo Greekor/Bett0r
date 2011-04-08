@@ -166,9 +166,9 @@ class Bet3000Scraper
     betname = "3Way"
     odd = game.odds.find_or_create_by_betname(betname)
 
-    odd.odd1 = infos["home"]
-    odd.oddX = infos["draw"]
-    odd.odd2 = infos["visitor"]
+    odd.home = infos["home"]
+    odd.draw = infos["draw"]
+    odd.away = infos["visitor"]
     odd.save
     #
     odd.touch
@@ -178,8 +178,8 @@ class Bet3000Scraper
     betname = "2Way"
     odd = game.odds.find_or_create_by_betname(betname)
 
-    odd.odd1 = infos["home"]
-    odd.odd2 = infos["visitor"]
+    odd.home = infos["home"]
+    odd.away = infos["visitor"]
     odd.save
     #
     odd.touch
