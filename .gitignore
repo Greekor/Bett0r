@@ -11,3 +11,4 @@ lib/scraper/bwin/*.html*
 lib/scraper/bwin/*.aspx*
 lib/scraper/bwin/fu%C3%9Fball
 lib/scraper/bwin/basketball
+lib/scraper/bwin/baseball

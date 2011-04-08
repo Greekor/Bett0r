@@ -8,6 +8,8 @@ implemented bettypes:
   2Way (Siegwette)
 
 implemented sports:
+  Baseball =>
+    Nordamerika => MLB
   Basketball =>
     Nordamerika => NBA
 	Fußball =>
@@ -21,6 +23,9 @@ implemented sports:
 class BWinScraper
   # constructor
   def initialize(sports={
+        "baseball" => {
+          "Nordamerika" => [ "MLB - National League", "MLB - American League"]
+        },
         "basketball" => {
           "Nordamerika" => [ "NBA" ],
         },
