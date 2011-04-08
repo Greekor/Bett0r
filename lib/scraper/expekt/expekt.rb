@@ -7,6 +7,7 @@ implemented bettypes:
   2Way / 3Way
   Over/Under
 implemented sports:
+  Basketball: NBA
   Baseball: MLB Preseason
             MLB
   Soccer: Ger. 1. Bundesliga
@@ -19,7 +20,7 @@ implemented sports:
 
 class ExpektScraper
   # constructor
-  def initialize(sports=["Ger. 1. Bundesliga", "Ger. 2. Bundesliga", "Eng. Premier League", "MLB Preseason", "MLB", "Spa. Primera Division", "Ita. Serie A"])
+  def initialize(sports=["Ger. 1. Bundesliga", "Ger. 2. Bundesliga", "Eng. Premier League", "MLB Preseason", "MLB", "Spa. Primera Division", "Ita. Serie A", "NBA"])
     @sports = sports
     @bookie = Bookmaker.find_or_create_by_name("Expekt")
     @dir = File.dirname(__FILE__)
