@@ -18,6 +18,9 @@ implemented sports:
   Basketball =>
     USA => NBA
 
+  Baseball =>
+    USA => MLB
+
 =end
 
 class Bet3000Scraper
@@ -25,6 +28,9 @@ class Bet3000Scraper
   def initialize(sports=
         { "Basketball inkl. Verlängerung" =>
           { "USA" => [ "NBA" ]
+          },
+          "Baseball" =>
+          { "USA" => [ "MLB inkl. Verlängerung" ]
           },
           "Fußball" => 
           { "Deutschland" => [ "1. Bundesliga", "2. Bundesliga" ],
