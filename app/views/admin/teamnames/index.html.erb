@@ -1,3 +1,10 @@
+<%= javascript_include_tag "jquery-1.5.2.min" %>
+<script type="text/javascript">
+function selector(name_id, suggestion_id) {
+  $("select#name_"+name_id+" > option[value=\""+suggestion_id+"\"]").attr("selected", "selected");
+}
+</script>
+
 <h2>List - Teamnames</h2>
 
 
@@ -20,6 +27,15 @@
         <td><%= check_box_tag("mainname[#{name.id}]") %></td>
       <% end %>
     </tr>
+  <% unless (name.is_main? || name.mainname) %>
+  <% name_suggestions(name).each do |suggestion| %>
+    <tr>
+      <td colspan="4"></td>
+      <td><a href="#" onClick="selector(<%= name.id %>, <%= suggestion[:id] %>); return false;"><%= suggestion[:name] %></a> (<%= suggestion[:id] %>) - </td>
+      <td>(<%= suggestion[:points] %> Punkte)</td>
+    </tr>
+  <% end %>
+  <% end %>
   <% end %>
 </table> 
 <p><%= submit_tag 'Update' %></p> 

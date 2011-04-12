@@ -6,6 +6,7 @@ class Admin::TeamnamesController < ApplicationController
       @names = Teamname.where("bookmaker_id = ?", params[:bookmaker_id]).order("name").all
     end
     @mainnames = Teamname.order(:name).where(:main => true).all
+    @token_occurences = get_token_occurences
   end
 
   def update_all
@@ -19,4 +20,25 @@ class Admin::TeamnamesController < ApplicationController
 
     redirect_to :action => 'index'
   end
+
+  private
+
+  def get_token_occurences
+    mainnames = @mainnames.map { |mainname| { :name => mainname.name, :id =>     mainname.id, :points => 0 } }
+        
+    # to lowercase und akzente etc rausstrippen...
+    token_occurences = {}
+    mainnames.each do |mainname|
+      mainname_tokens = mainname[:name].split(/\s+/)
+      mainname_tokens.each do |mnt|
+        if token_occurences.has_key? mnt
+          token_occurences[mnt] += 1.0
+        else
+          token_occurences[mnt] = 1.0
+        end
+      end
+    end
+    token_occurences
+   end
+
 end
