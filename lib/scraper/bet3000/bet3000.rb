@@ -99,6 +99,7 @@ class Bet3000Scraper
 		@sports.each do |sport, regions|
     regions.each do |region, leagues|
     leagues.each do |league|
+    if @cat_hash.include? sport and @cat_hash[sport].include? region and @cat_hash[sport][region].include? league then
 			url = "https://www.bet3000.com/ajax/de/sportsbook.json.html?category_id=#{@cat_hash[sport][region][league]}"
 			load(url)
     	json = IO.read(File.join(@dir, url.split("/").last))[11..-4]
@@ -134,6 +135,7 @@ class Bet3000Scraper
         end
       end
         
+    end
 		end
   	end
     end

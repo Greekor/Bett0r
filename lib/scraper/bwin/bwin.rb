@@ -74,6 +74,7 @@ class BWinScraper
   	@sports.each do |sport, regions|
   		regions.each do |region, leagues|
   			leagues.each do |league|
+        if @leagueids.include? sport and @leagueids[sport].include? region and @leagueids[sport][region].include? league then
   				url = main_url+@leagueids[sport][region][league] 
   				load(url)
   				doc = Hpricot(open(File.join(@dir, url.split("/").last)))
@@ -94,6 +95,7 @@ class BWinScraper
 						end	
 					end
   				
+        end
   			end
   		end
   	end
