@@ -6,16 +6,32 @@ require 'open-uri'
 =begin
 
 implemented bettypes:
-
+  3WAY/2WAY
 implemented sports:
+  Baseball =>
+    MLB
+  Basketball =>
+    NBA
+  Soccer =>
+    Deutschland => Bundesliga, 2.Bundesliga
+    England => Premier League
+    Spanien => Primera Division
+    Italien => Serie A
+
 
 =end
 
 class UnibetScraper
   # constructor
   def initialize(sports={
+      "Baseball" => {
+        "MLB" => [ "Regular Season" ]
+      },
+      "Basketball" => {
+        "NBA" => [ "Regular Season" ]
+      },
 			"All Football" => {
-					"Germany" => [ "Bundesliga" ],
+					"Germany" => [ "Bundesliga", "2.Bundesliga" ],
           "England" => [ "Premier League" ],
           "Spain" => [ "Primera División" ],
           "Italy" => [ "Serie A" ]
@@ -131,14 +147,18 @@ class UnibetScraper
   private
 
   def parse_Match(game, infos)
-    betname = "3Way"
-
-    odd = game.odds.find_or_create_by_betname(betname)
-
 		odds = (infos/"td.uTdInnerBetTd")
 		odd1 = odds[0].inner_text.strip
 		oddX = odds[1].inner_text.strip
 		odd2 = odds[2].inner_text.strip
+    
+    if oddX.empty? 
+      betname = "2Way"
+    else
+      betname = "3Way"
+    end
+
+    odd = game.odds.find_or_create_by_betname(betname)
 
     odd.odd1 = odd1
     odd.oddX = oddX
@@ -151,6 +171,6 @@ class UnibetScraper
 
 end
 
-u = UnibetScraper.new
-u.load_and_parse_navigation
-u.load_and_parse
+#uni = UnibetScraper.new
+#uni.load_and_parse_navigation
+#uni.load_and_parse
