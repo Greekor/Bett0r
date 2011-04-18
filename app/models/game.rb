@@ -54,4 +54,64 @@ class Game < ActiveRecord::Base
     end
     array 
   end
+
+  def self.best_bets_by_bookie(bookie)
+    games = self.all
+    array = []
+    games.each do |game|
+      game.odds.by_bettype.each do |bettype, odds|
+        bookie_odds = odds.select { |o| o.bookie_game.bookmaker_id == bookie.id }.first
+        if not bookie_odds.nil? then
+          # bookie-odd is 1
+          infos = {}
+          infos[:game] = game
+          infos[:bettype] = bettype
+          
+          infos[:odd1] = bookie_odds 
+          odds.sort_by! { |o| o.oddX } 
+          infos[:oddX] = odds.last
+          odds.sort_by! { |o| o.odd2 }
+          infos[:odd2] = odds.last
+          unless (infos[:odd1].odd1.nil? || infos[:odd2].odd2.nil?) then
+            infos[:per] = 1 / (1/infos[:odd1].odd1 + (infos[:oddX].oddX.nil? ? 0.0 : 1/infos[:oddX].oddX) + 1/infos[:odd2].odd2) * 100
+            array << infos
+          end
+
+          # bookie-odd is X 
+          unless bookie_odds.oddX.nil? then
+            infos = {}
+            infos[:game] = game
+            infos[:bettype] = bettype
+            odds.sort_by! { |o| o.odd1 }
+            infos[:odd1] = odds.last
+          
+            infos[:oddX] = bookie_odds
+            odds.sort_by! { |o| o.odd2 }
+            infos[:odd2] = odds.last
+            unless (infos[:odd1].odd1.nil? || infos[:odd2].odd2.nil?) then
+              infos[:per] = 1 / (1/infos[:odd1].odd1 + (infos[:oddX].oddX.nil? ? 0.0 : 1/infos[:oddX].oddX) + 1/infos[:odd2].odd2) * 100
+              array << infos
+            end
+          end
+
+          # bookie-odd is 2 
+          infos = {}
+          infos[:game] = game
+          infos[:bettype] = bettype
+          odds.sort_by! { |o| o.odd1 }
+          infos[:odd1] = odds.last
+          odds.sort_by! { |o| o.oddX }
+          infos[:oddX] = odds.last
+          
+          infos[:odd2] = bookie_odds
+          unless (infos[:odd1].odd1.nil? || infos[:odd2].odd2.nil?) then
+            infos[:per] = 1 / (1/infos[:odd1].odd1 + (infos[:oddX].oddX.nil? ? 0.0 : 1/infos[:oddX].oddX) + 1/infos[:odd2].odd2) * 100
+            array << infos
+          end
+
+        end
+      end
+    end
+    array 
+  end
 end

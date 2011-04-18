@@ -16,6 +16,8 @@ Bett0r::Application.routes.draw do
 
   get "analyzer/index"
 
+  match "analyzer/:bookie_id" => "analyzer#index"
+
   resources :games
 
   # The priority is based upon order of creation:
