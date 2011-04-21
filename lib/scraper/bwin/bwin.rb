@@ -24,16 +24,16 @@ class BWinScraper
   # constructor
   def initialize(sports={
         "baseball" => {
-          "Nordamerika" => [ "MLB - National League", "MLB - American League"]
+          "North America" => [ "MLB - National League", "MLB - American League"]
         },
         "basketball" => {
-          "Nordamerika" => [ "NBA" ],
+          "North America" => [ "NBA" ],
         },
-  			"fu%C3%9Fball" => {
-  				"Deutschland" => [ "Bundesliga", "2. Bundesliga" ],
+  			"football" => {
+  				"Germany" => [ "Bundesliga", "2. Bundesliga" ],
   				"England" => [ "Premier League" ],
-  				"Spanien" => [ "Primera Division (Liga BBVA)" ],
-          "Italien" => [ "Serie A" ],
+  				"Spain" => [ "Primera Division (Liga BBVA)" ],
+          "Italy" => [ "Serie A" ],
   			}  			
   			})
     @sports = sports
@@ -52,7 +52,7 @@ class BWinScraper
   end
   
   def get_league_ids
-  	main_url = "https://www.bwin.com/de/"
+  	main_url = "https://www.bwin.com/en/"
   	@sports.each_key do |sport|
   		@leagueids[sport] = {} unless @leagueids.include? sport
   	
@@ -70,7 +70,7 @@ class BWinScraper
 	end
 
   def load_and_parse
-  	main_url = "https://www.bwin.com/de/betViewIframe.aspx?selectedLeagues=1&leagueids="
+  	main_url = "https://www.bwin.com/en/betViewIframe.aspx?selectedLeagues=1&leagueids="
   	@sports.each do |sport, regions|
   		regions.each do |region, leagues|
   			leagues.each do |league|
@@ -124,7 +124,7 @@ class BWinScraper
 
   private
 
-  def parse_3Weg(cols, date)
+  def parse_3Way(cols, date)
   	time = cols[0].inner_text.strip
 		home_name = (cols[1]/"td.label").inner_text.strip
 	 	away_name = (cols[3]/"td.label").inner_text.strip
@@ -132,6 +132,7 @@ class BWinScraper
   	game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(home_name, away_name)
 							
 		#starttime
+    puts "#{date}T#{time}"
     game.starttime = Time.parse("#{date}T#{time}")
     game.save
 

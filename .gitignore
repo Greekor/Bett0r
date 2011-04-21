@@ -9,7 +9,7 @@ lib/scraper/expekt/exportServlet
 lib/scraper/bet3000/*.html*
 lib/scraper/bwin/*.html*
 lib/scraper/bwin/*.aspx*
-lib/scraper/bwin/fu%C3%9Fball
+lib/scraper/bwin/football
 lib/scraper/bwin/basketball
 lib/scraper/bwin/baseball
 lib/scraper/unibet/betting

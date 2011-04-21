@@ -56,8 +56,8 @@ class ExpektScraper
         end
         #
 
-        betmethod = "parse_#{infos[:bettype].gsub("/","_")}"
-        if self.class.private_method_defined? betmethod then
+        betmethod = "parse_#{infos[:bettype].gsub("/","_")}" unless infos[:bettype].nil?
+        if !betmethod.nil? and self.class.private_method_defined? betmethod then
           game = @bookie.bookie_games.find_or_create_by_home_name_and_away_name(infos[:home_name], infos[:away_name])
 
           # starttime

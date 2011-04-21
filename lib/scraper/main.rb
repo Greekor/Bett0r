@@ -59,7 +59,7 @@ while true do
 	b30.load_and_parse
 	
 	puts "BWin"
-  time = File.stat(File.join(@dir, "bwin/fu%C3%9Fball")).mtime
+  time = File.stat(File.join(@dir, "bwin/football")).mtime
   # wait at least 5 min
   while Time.now - 5.minutes < time do
     puts "sleep..."
