@@ -50,7 +50,7 @@ while true do
   # only load new odds
   exp.load
   exp.parse
-  
+
   puts "Bet3000"
   time = File.stat(File.join(@dir, "bet3000/home.html")).mtime
   # wait at least 5 min
@@ -61,7 +61,7 @@ while true do
   # only load new odds
   b30.load_and_parse_navigation
 	b30.load_and_parse
-	
+
 	puts "BWin"
   time = File.stat(File.join(@dir, "bwin/football")).mtime
   # wait at least 5 min
@@ -72,7 +72,7 @@ while true do
   # only load new odds
 	bwin.get_league_ids
 	bwin.load_and_parse
-	
+  
   puts "Unibet"
   time = File.stat(File.join(@dir, "unibet/betting")).mtime
   # wait at least 5 min
